@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>STEP UP CODING STUDIO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="approved-home-body">
+  <main class="approved-home">
+    <img src="assets/approved-home-screen.png"
+         alt="STEP UP CODING STUDIO — World 1 Cat and Mouse"
+         class="approved-home-image" draggable="false">
+
+    <button class="home-hotspot start-hotspot" aria-label="เริ่มเกม"
+            onclick="StepUpAudio.playClick(); setTimeout(()=>location.href='mission-select.html',90)"></button>
+    <button class="home-hotspot settings-hotspot" aria-label="ตั้งค่า"
+            onclick="openHomeSettings()"></button>
+    <button class="home-hotspot exit-hotspot" aria-label="ออกจากเกม"
+            onclick="exitGame()"></button>
+
+    <section id="homeSettings" class="home-settings-panel hidden" aria-hidden="true">
+      <div class="settings-card">
+        <h2>ตั้งค่าเสียง</h2>
+        <button data-music-button class="settings-action" onclick="StepUpAudio.toggleMusic()">♫ เพลง: เปิด</button>
+        <button data-sfx-button class="settings-action" onclick="StepUpAudio.toggleSfx()">🔊 เสียง: เปิด</button>
+        <button class="settings-close" onclick="closeHomeSettings()">ปิด</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/audio.js"></script>
+  <script>
+    function openHomeSettings() {
+      StepUpAudio.playClick();
+      StepUpAudio.syncButtons();
+      const panel = document.getElementById('homeSettings');
+      panel.classList.remove('hidden');
+      panel.setAttribute('aria-hidden','false');
+    }
+    function closeHomeSettings() {
+      StepUpAudio.playClick();
+      const panel = document.getElementById('homeSettings');
+      panel.classList.add('hidden');
+      panel.setAttribute('aria-hidden','true');
+    }
+    function exitGame() {
+      StepUpAudio.playClick();
+      if (confirm('ต้องการออกจากเกมหรือไม่?')) {
+        StepUpAudio.stopMusic();
+        document.body.innerHTML =
+          '<main class="exit-screen"><img src="assets/stepup-logo.png" alt="STEP UP ACADEMY"><h1>ขอบคุณที่มาเล่นนะคะ</h1><button onclick="location.reload()">กลับหน้า Home</button></main>';
+      }
+    }
+  </script>
+</body>
+</html>

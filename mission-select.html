@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>เลือก Mission</title>
+<link rel="stylesheet" href="css/style.css">
+<meta name="apple-mobile-web-app-capable" content="yes"></head>
+<body>
+<main class="select-page">
+  <header class="top select-top">
+    <div>
+      <h1>World 1 : Cat & Mouse</h1>
+      <p>เลือก Mission ที่ต้องการทดลองเล่น</p>
+    </div>
+    <div class="select-audio-controls">
+      <button data-music-button class="small" onclick="StepUpAudio.toggleMusic()">♫ เพลง: เปิด</button>
+      <button data-sfx-button class="small" onclick="StepUpAudio.toggleSfx()">🔊 เสียง: เปิด</button>
+      <button class="small" onclick="location.href='index.html'">HOME</button>
+    </div>
+  </header>
+
+  <section class="select-card">
+    <h2>Mission 01–20</h2>
+    <p class="select-note">ครูสามารถเลือกทดสอบด่านไหนก่อนก็ได้ ไม่จำเป็นต้องเล่นเรียงจาก 1 ถึง 20</p>
+    <div class="mission-grid">
+      <button onclick="go(1)" class="m-card easy"><b>01</b><span>First Step</span></button>
+      <button onclick="go(2)" class="m-card easy"><b>02</b><span>First Star</span></button>
+      <button onclick="go(3)" class="m-card easy"><b>03</b><span>Go Up</span></button>
+      <button onclick="go(4)" class="m-card easy"><b>04</b><span>Go Around</span></button>
+      <button onclick="go(5)" class="m-card easy"><b>05</b><span>Challenge</span></button>
+
+      <button onclick="go(6)" class="m-card medium"><b>06</b><span>Repeat 2</span></button>
+      <button onclick="go(7)" class="m-card medium"><b>07</b><span>Rock & Tree</span></button>
+      <button onclick="go(8)" class="m-card medium"><b>08</b><span>Water Pond</span></button>
+      <button onclick="go(9)" class="m-card medium"><b>09</b><span>Long Route</span></button>
+      <button onclick="go(10)" class="m-card medium"><b>10</b><span>Repeat 2 & 3</span></button>
+
+      <button onclick="go(11)" class="m-card hard"><b>11</b><span>Choose Path</span></button>
+      <button onclick="go(12)" class="m-card hard"><b>12</b><span>Star First</span></button>
+      <button onclick="go(13)" class="m-card hard"><b>13</b><span>Opposite Stars</span></button>
+      <button onclick="go(14)" class="m-card hard"><b>14</b><span>Narrow Gate</span></button>
+      <button onclick="go(15)" class="m-card hard"><b>15</b><span>Mini Boss 2</span></button>
+
+      <button onclick="go(16)" class="m-card boss"><b>16</b><span>Harder Route</span></button>
+      <button onclick="go(17)" class="m-card boss"><b>17</b><span>Maze Start</span></button>
+      <button onclick="go(18)" class="m-card boss"><b>18</b><span>Plan Ahead</span></button>
+      <button onclick="go(19)" class="m-card boss"><b>19</b><span>Small Maze</span></button>
+      <button onclick="go(20)" class="m-card boss"><b>20</b><span>World 1 Boss</span></button>
+    </div>
+    <div class="level-legend">
+      <span class="easy-dot">01–05 ง่าย</span>
+      <span class="medium-dot">06–10 เริ่มทำซ้ำ</span>
+      <span class="hard-dot">11–15 วางแผนมากขึ้น</span>
+      <span class="boss-dot">16–20 ท้าทาย</span>
+    </div>
+  </section>
+</main>
+<script src="js/audio.js"></script>
+<script>
+function go(id){
+  StepUpAudio.playClick();
+  setTimeout(()=>location.href='mission.html?id='+id,70);
+}
+</script>
+</body>
+</html>
