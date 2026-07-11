@@ -7,6 +7,9 @@ let missionId=parseInt(params.get('id')||'1',10);
 let m=missions[missionId]||missions[1];
 const total=42, cols=7;
 let pos=m.s, gotStars=[], commands=[], running=false;
+let commandHistory=[];
+let activeDrag=null;
+let suppressPaletteClick=false;
 
 const iconCmd={
   up:'⬆ เดินขึ้น', down:'⬇ เดินลง',
@@ -72,24 +75,181 @@ function draw(){
   }
 }
 
-function addCommand(cmd){
+function saveHistory(){
+  commandHistory.push([...commands]);
+  if(commandHistory.length>30) commandHistory.shift();
+}
+
+function addCommand(cmd, index=commands.length){
   if(running) return;
-  commands.push(cmd);
+  saveHistory();
+  commands.splice(index,0,cmd);
+  renderProgram();
+  StepUpAudio.playClick();
+}
+
+function removeCommand(index){
+  if(running || index<0 || index>=commands.length) return;
+  saveHistory();
+  commands.splice(index,1);
+  renderProgram();
+  StepUpAudio.playClick();
+}
+
+function undoCommand(){
+  if(running) return;
+  if(!commandHistory.length){
+    StepUpAudio.playError();
+    return;
+  }
+  commands=commandHistory.pop();
   renderProgram();
   StepUpAudio.playClick();
 }
 
 function renderProgram(){
+  program.innerHTML='';
   if(!commands.length){
-    program.innerHTML='กดบล็อกคำสั่งเพื่อวางที่นี่';
+    program.innerHTML='<span class="program-empty">ลากบล็อกคำสั่งมาวางที่นี่ หรือแตะเพื่อเพิ่ม</span>';
     return;
   }
-  program.innerHTML=commands.map(c=>`<span class="program-block ${c.startsWith('repeat')?'repeat':''}">${iconCmd[c]}</span>`).join('');
+  commands.forEach((cmd,index)=>{
+    const block=document.createElement('span');
+    block.className='program-block '+(cmd.startsWith('repeat')?'repeat':'');
+    block.dataset.command=cmd;
+    block.dataset.index=String(index);
+    block.innerHTML=`<span class="block-label">${index+1}. ${iconCmd[cmd]}</span><button class="block-delete" type="button" aria-label="ลบคำสั่งที่ ${index+1}">×</button>`;
+    block.querySelector('.block-delete').addEventListener('click',event=>{
+      event.stopPropagation();
+      removeCommand(index);
+    });
+    installPointerDrag(block,'program');
+    program.appendChild(block);
+  });
+}
+
+function installPointerDrag(element, source){
+  element.addEventListener('pointerdown',event=>{
+    if(running || event.target.closest('.block-delete')) return;
+    if(event.pointerType==='mouse' && event.button!==0) return;
+    event.preventDefault();
+    const command=element.dataset.command;
+    const fromIndex=source==='program' ? Number(element.dataset.index) : -1;
+    const ghost=element.cloneNode(true);
+    ghost.querySelector('.block-delete')?.remove();
+    ghost.classList.add('drag-ghost');
+    document.body.appendChild(ghost);
+    activeDrag={source,command,fromIndex,ghost,element,pointerId:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY};
+    element.classList.add('is-dragging');
+    program.classList.add('drop-ready');
+    moveDragGhost(event.clientX,event.clientY);
+    element.setPointerCapture?.(event.pointerId);
+  });
+  element.addEventListener('pointermove',event=>{
+    if(!activeDrag || activeDrag.pointerId!==event.pointerId) return;
+    event.preventDefault();
+    if(Math.hypot(event.clientX-activeDrag.startX,event.clientY-activeDrag.startY)>7) activeDrag.moved=true;
+    moveDragGhost(event.clientX,event.clientY);
+    updateDropMarker(event.clientX,event.clientY);
+  });
+  element.addEventListener('pointerup',finishPointerDrag);
+  element.addEventListener('pointercancel',cancelPointerDrag);
+}
+
+function moveDragGhost(x,y){
+  if(!activeDrag) return;
+  activeDrag.ghost.style.left=x+'px';
+  activeDrag.ghost.style.top=y+'px';
+}
+
+function pointInsideProgram(x,y){
+  const rect=program.getBoundingClientRect();
+  return x>=rect.left && x<=rect.right && y>=rect.top && y<=rect.bottom;
+}
+
+function getDropIndex(x,y){
+  const blocks=[...program.querySelectorAll('.program-block:not(.is-dragging)')];
+  for(let i=0;i<blocks.length;i++){
+    const rect=blocks[i].getBoundingClientRect();
+    if(y<rect.top+rect.height/2 || (y<=rect.bottom && x<rect.left+rect.width/2)) return i;
+  }
+  return blocks.length;
+}
+
+function updateDropMarker(x,y){
+  program.querySelector('.drop-marker')?.remove();
+  if(!pointInsideProgram(x,y)) return;
+  const marker=document.createElement('span');
+  marker.className='drop-marker';
+  const index=getDropIndex(x,y);
+  const blocks=[...program.querySelectorAll('.program-block:not(.is-dragging)')];
+  program.insertBefore(marker,blocks[index]||null);
+}
+
+function finishPointerDrag(event){
+  if(!activeDrag || activeDrag.pointerId!==event.pointerId) return;
+  const drag=activeDrag;
+  const inside=pointInsideProgram(event.clientX,event.clientY);
+  if(!drag.moved && drag.source==='palette'){
+    cleanupPointerDrag();
+    addCommand(drag.command);
+    suppressPaletteClick=true;
+    setTimeout(()=>suppressPaletteClick=false,0);
+    return;
+  }
+  if(inside){
+    let targetIndex=getDropIndex(event.clientX,event.clientY);
+    saveHistory();
+    if(drag.source==='program'){
+      const [moving]=commands.splice(drag.fromIndex,1);
+      if(targetIndex>drag.fromIndex) targetIndex--;
+      commands.splice(Math.max(0,targetIndex),0,moving);
+    }else{
+      commands.splice(targetIndex,0,drag.command);
+    }
+    cleanupPointerDrag();
+    renderProgram();
+    StepUpAudio.playClick();
+  }else{
+    if(drag.source==='program' && drag.moved){
+      saveHistory();
+      commands.splice(drag.fromIndex,1);
+      StepUpAudio.playClick();
+    }
+    cleanupPointerDrag();
+    renderProgram();
+  }
+}
+
+function cancelPointerDrag(){
+  cleanupPointerDrag();
+  renderProgram();
+}
+
+function cleanupPointerDrag(){
+  if(!activeDrag) return;
+  activeDrag.ghost.remove();
+  activeDrag.element.classList.remove('is-dragging');
+  program.classList.remove('drop-ready');
+  program.querySelector('.drop-marker')?.remove();
+  activeDrag=null;
+}
+
+function setupCommandPalette(){
+  document.querySelectorAll('.cmd[data-command]').forEach(button=>{
+    installPointerDrag(button,'palette');
+    button.addEventListener('click',event=>{
+      if(suppressPaletteClick){ event.preventDefault(); return; }
+      addCommand(button.dataset.command);
+    });
+  });
 }
 
 function resetMission(){
   if(running) return;
-  pos=m.s; gotStars=[]; commands=[];
+  pos=m.s; gotStars=[];
+  if(commands.length) saveHistory();
+  commands=[];
   renderProgram(); draw();
   StepUpAudio.playClick();
 }
@@ -172,6 +332,8 @@ function check(){
 
 function clearOne(){
   if(running) return;
+  if(!commands.length) return;
+  saveHistory();
   commands.pop();
   renderProgram();
   StepUpAudio.playClick();
@@ -207,10 +369,12 @@ function showSolution(){
     alert('ด่านนี้มีหลายวิธี ครูใช้ Hint ประกอบและให้เด็กอธิบายเส้นทางค่ะ');
     return;
   }
+  saveHistory();
   commands=[...sol];
   renderProgram();
 }
 
+setupCommandPalette();
 draw();
 renderProgram();
 StepUpAudio.syncButtons();
