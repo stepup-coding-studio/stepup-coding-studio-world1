@@ -1,0 +1,11 @@
+STEP UP CODING STUDIO — WORLD 1 v3.6
+
+Change made:
+- Repeat 3 button color changed from pink to the same orange as Repeat 2.
+
+Unchanged:
+- iPad Coding Area scrolling
+- Layout and button positions
+- All 20 missions
+- Drag/drop, RUN, Undo, Clear
+- Audio and Teacher Mode

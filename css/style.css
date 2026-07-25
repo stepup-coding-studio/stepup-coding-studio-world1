@@ -759,3 +759,7 @@ html,body{
   border:2px solid #e8f2fc;
   border-radius:999px;
 }
+
+
+/* v3.6: Repeat 3 button uses the same orange as Repeat 2. No layout or game logic changes. */
+#repeat3Btn{background:#ff9f1c!important;box-shadow:0 5px 0 #b96b08!important;}
