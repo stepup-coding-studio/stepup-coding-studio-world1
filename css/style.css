@@ -71,7 +71,7 @@
 .cell.rock{background:linear-gradient(145deg,#eceff2,#c2c9cf);border-color:#66717b}
 .cell.water{background:linear-gradient(145deg,#bcefff,#6fd2f6);border-color:#0b79b2}
 #repeat2Btn{background:#ff9f1c;box-shadow:0 5px 0 #b96b08}
-#repeat3Btn{background:#e854c6;box-shadow:0 5px 0 #9a2c80}
+#repeat3Btn{background:#ff9f1c;box-shadow:0 5px 0 #b96b08}
 
 /* Classroom polish */
 .header-actions{display:flex;gap:8px;flex-wrap:wrap}
