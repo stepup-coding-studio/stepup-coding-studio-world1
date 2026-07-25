@@ -1,0 +1,17 @@
+STEP UP CODING STUDIO — WORLD 1 v3.4 iPad Scroll Fix
+
+Changed only:
+1. Coding Area now permits vertical touch panning on iPad.
+2. Momentum scrolling is enabled for iPad Safari.
+3. Vertical overflow remains contained inside Coding Area.
+4. A styled scrollbar is provided where the browser/OS displays scrollbars.
+5. Pointer-cancel cleanup no longer rebuilds Coding Area, preserving scroll position during native touch scrolling.
+
+Not changed:
+- Coding Area dimensions
+- Button positions or sizes
+- Board layout
+- Mission logic (1–20)
+- Command execution
+- Audio
+- Teacher Mode

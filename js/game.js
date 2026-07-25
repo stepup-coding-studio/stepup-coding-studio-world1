@@ -222,8 +222,10 @@ function finishPointerDrag(event){
 }
 
 function cancelPointerDrag(){
+  // A native vertical swipe on iPad cancels the pointer drag.
+  // Clean up the temporary drag state without rebuilding the program,
+  // so Safari can keep the Coding Area's scroll position.
   cleanupPointerDrag();
-  renderProgram();
 }
 
 function cleanupPointerDrag(){

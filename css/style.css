@@ -643,3 +643,119 @@ html,body{
   .palette-buttons{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,76px)}
   .program{min-height:210px!important}
 }
+
+
+/* ============================================================
+   WORLD 1 FINAL POLISH v3.3 — LOCKED
+   Final approved adjustments only:
+   1) Thicker/larger arrows
+   2) Larger command labels
+   3) Slightly more spacing between palette buttons
+   ============================================================ */
+
+.palette-buttons{
+  gap:10px !important;
+}
+
+.palette-buttons .cmd{
+  gap:14px !important;
+  padding-top:6px !important;
+  padding-bottom:6px !important;
+}
+
+/* Direction arrows: larger and visually heavier */
+.cmd-arrow{
+  flex-basis:82px !important;
+  width:82px !important;
+  font-size:clamp(58px,7.6vh,78px) !important;
+  font-weight:1000 !important;
+  line-height:.78 !important;
+  -webkit-text-stroke:3px rgba(0,0,0,.16) !important;
+  text-shadow:
+    0 3px 0 rgba(0,0,0,.18),
+    2px 0 0 rgba(255,255,255,.18),
+    -2px 0 0 rgba(255,255,255,.18) !important;
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.2)) !important;
+}
+
+/* Command labels: about 15% larger */
+.cmd-text{
+  font-size:clamp(20px,2.35vh,25px) !important;
+  font-weight:1000 !important;
+  letter-spacing:.1px !important;
+}
+
+/* Repeat icons remain balanced with the larger arrows */
+.cmd-repeat{
+  flex-basis:70px !important;
+  width:70px !important;
+  font-size:clamp(46px,6.1vh,58px) !important;
+}
+
+/* iPad landscape */
+@media (orientation:landscape) and (max-width:1180px) and (max-height:850px){
+  .palette-buttons{
+    gap:8px !important;
+  }
+  .cmd-arrow{
+    flex-basis:58px !important;
+    width:58px !important;
+    font-size:46px !important;
+    -webkit-text-stroke:2px rgba(0,0,0,.16) !important;
+  }
+  .cmd-repeat{
+    flex-basis:50px !important;
+    width:50px !important;
+    font-size:39px !important;
+  }
+  .cmd-text{
+    font-size:16px !important;
+  }
+}
+
+/* iPad portrait */
+@media (orientation:portrait) and (min-width:700px){
+  .palette-buttons{
+    gap:7px !important;
+  }
+  .cmd-arrow{
+    flex-basis:46px !important;
+    width:46px !important;
+    font-size:39px !important;
+    -webkit-text-stroke:2px rgba(0,0,0,.16) !important;
+  }
+  .cmd-repeat{
+    flex-basis:42px !important;
+    width:42px !important;
+    font-size:33px !important;
+  }
+  .cmd-text{
+    font-size:13px !important;
+  }
+}
+
+/* ============================================================
+   WORLD 1 v3.4 — iPad Coding Area scroll fix
+   Scope: touch scrolling only; no layout, sizing, controls, or mission changes.
+   ============================================================ */
+.program{
+  touch-action:pan-y!important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  scrollbar-gutter:stable;
+}
+.program-block{
+  touch-action:pan-y;
+}
+.program::-webkit-scrollbar{
+  width:10px;
+}
+.program::-webkit-scrollbar-track{
+  background:#e8f2fc;
+  border-radius:999px;
+}
+.program::-webkit-scrollbar-thumb{
+  background:#79b4e8;
+  border:2px solid #e8f2fc;
+  border-radius:999px;
+}
