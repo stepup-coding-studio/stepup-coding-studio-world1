@@ -1,0 +1,11 @@
+WORLD 1 v3.8 — Command Palette Centering Only
+
+Changes:
+- Centered arrow/repeat icon and label groups inside each command button.
+- Added safe inner spacing to prevent icons or labels touching button edges.
+- Normalized icon boxes for landscape and portrait tablets.
+- No JavaScript, game logic, missions, audio, scoring, or controls changed.
+
+QA targets:
+- iPad (Safari)
+- Xiaomi Pad 8 (Chrome)
