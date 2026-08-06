@@ -763,3 +763,141 @@ html,body{
 
 /* v3.6: Repeat 3 button uses the same orange as Repeat 2. No layout or game logic changes. */
 #repeat3Btn{background:#ff9f1c!important;box-shadow:0 5px 0 #b96b08!important;}
+
+/* ============================================================
+   WORLD 1 v3.7 — Cross-platform arrow normalization
+   Scope: visual icons only. Keeps game logic and iPad layout unchanged.
+   SVG icons prevent iOS/Android/Windows font rendering differences.
+   ============================================================ */
+.cmd-arrow{
+  font-size:0!important;
+  line-height:1!important;
+  -webkit-text-stroke:0!important;
+  text-shadow:none!important;
+  filter:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.cmd-arrow img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:72px;
+  max-height:72px;
+  object-fit:contain;
+  aspect-ratio:1/1;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.2));
+}
+@media (orientation:landscape) and (max-width:1180px) and (max-height:850px){
+  .cmd-arrow img{max-width:46px;max-height:46px}
+}
+@media (orientation:portrait) and (min-width:700px){
+  .cmd-arrow img{max-width:39px;max-height:39px}
+}
+
+/* ============================================================
+   WORLD 1 v3.8 — Command palette centering polish
+   Scope: CSS layout only. No game logic, mission, audio, or controls changed.
+   Keeps command icons and labels centered with safe inner spacing.
+   ============================================================ */
+.palette-buttons .cmd{
+  display:grid!important;
+  grid-template-columns:54px max-content!important;
+  align-items:center!important;
+  justify-content:center!important;
+  justify-items:center!important;
+  column-gap:10px!important;
+  padding:6px 12px!important;
+  overflow:hidden!important;
+}
+.cmd-arrow,
+.cmd-repeat{
+  width:54px!important;
+  min-width:54px!important;
+  max-width:54px!important;
+  height:54px!important;
+  min-height:0!important;
+  flex:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+.cmd-arrow img{
+  width:44px!important;
+  height:44px!important;
+  max-width:44px!important;
+  max-height:44px!important;
+  object-fit:contain!important;
+  margin:auto!important;
+}
+.cmd-repeat{
+  font-size:36px!important;
+  line-height:1!important;
+}
+.cmd-text{
+  flex:none!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  line-height:1.1!important;
+}
+
+/* Compact tablet landscape, including Xiaomi Pad 8 and iPad */
+@media (orientation:landscape) and (max-width:1180px) and (max-height:850px){
+  .palette-buttons .cmd{
+    grid-template-columns:44px max-content!important;
+    column-gap:7px!important;
+    padding:5px 8px!important;
+  }
+  .cmd-arrow,
+  .cmd-repeat{
+    width:44px!important;
+    min-width:44px!important;
+    max-width:44px!important;
+    height:44px!important;
+  }
+  .cmd-arrow img{
+    width:36px!important;
+    height:36px!important;
+    max-width:36px!important;
+    max-height:36px!important;
+  }
+  .cmd-repeat{font-size:31px!important}
+  .cmd-text{font-size:15px!important}
+}
+
+/* Tablet portrait */
+@media (orientation:portrait) and (min-width:700px){
+  .palette-buttons .cmd{
+    grid-template-columns:38px max-content!important;
+    column-gap:5px!important;
+    padding:4px 6px!important;
+  }
+  .cmd-arrow,
+  .cmd-repeat{
+    width:38px!important;
+    min-width:38px!important;
+    max-width:38px!important;
+    height:38px!important;
+  }
+  .cmd-arrow img{
+    width:31px!important;
+    height:31px!important;
+    max-width:31px!important;
+    max-height:31px!important;
+  }
+  .cmd-repeat{font-size:27px!important}
+  .cmd-text{font-size:12px!important}
+}
