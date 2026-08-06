@@ -1,3 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ลง">
-  <path fill="white" stroke="rgba(0,0,0,.18)" stroke-width="3" stroke-linejoin="round" d="M32 59 9 35h14V5h18v30h14L32 59z"/>
+  <g transform="rotate(90 32 32)">
+    <path fill="white" stroke="#d1d7df" stroke-width="3" stroke-linejoin="round" d="m59 32-24-23v14H5v18h30v14l24-23z"/>
+  </g>
 </svg>
